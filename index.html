@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RPE Lab — Rede de Participação Econômica</title>
+
+  <style>
+    :root {
+      --bg: #f7f8f6;
+      --text: #10201d;
+      --muted: #65736f;
+      --line: #dce4df;
+      --card: rgba(255,255,255,0.78);
+      --blue: #0f3d4c;
+      --green: #19a974;
+      --soft-green: #e8f7ef;
+      --shadow: 0 24px 70px rgba(15, 61, 76, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(25,169,116,.16), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(15,61,76,.14), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1160px, 92%);
+      margin: auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(247,248,246,.78);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      background: var(--blue);
+      position: relative;
+      box-shadow: var(--shadow);
+    }
+
+    .logo::before,
+    .logo::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .logo::before {
+      width: 9px;
+      height: 9px;
+      top: 9px;
+      left: 9px;
+    }
+
+    .logo::after {
+      width: 14px;
+      height: 14px;
+      right: 8px;
+      bottom: 8px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .hero {
+      padding: 90px 0 60px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.65);
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 28px;
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 0 rgba(25,169,116,.5);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      70% { box-shadow: 0 0 0 10px rgba(25,169,116,0); }
+      100% { box-shadow: 0 0 0 0 rgba(25,169,116,0); }
+    }
+
+    h1 {
+      font-size: clamp(44px, 8vw, 96px);
+      line-height: .92;
+      letter-spacing: -0.08em;
+      margin-bottom: 28px;
+    }
+
+    .hero p {
+      max-width: 720px;
+      margin: 0 auto 34px;
+      font-size: clamp(18px, 2vw, 24px);
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 15px 22px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: white;
+      cursor: pointer;
+      font-weight: 700;
+      transition: .25s ease;
+    }
+
+    .btn.primary {
+      background: var(--blue);
+      color: white;
+      border-color: var(--blue);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .map {
+      margin: 40px auto 0;
+      max-width: 880px;
+      min-height: 420px;
+      border: 1px solid var(--line);
+      border-radius: 34px;
+      background: rgba(255,255,255,.55);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map::before {
+      content: "";
+      position: absolute;
+      inset: -30%;
+      background:
+        radial-gradient(circle, rgba(25,169,116,.15), transparent 12%),
+        radial-gradient(circle at 70% 30%, rgba(15,61,76,.12), transparent 18%);
+      animation: float 10s ease-in-out infinite alternate;
+    }
+
+    @keyframes float {
+      from { transform: translate(-20px, -10px) scale(1); }
+      to { transform: translate(20px, 10px) scale(1.06); }
+    }
+
+    .node {
+      position: absolute;
+      z-index: 2;
+      padding: 14px 18px;
+      border-radius: 999px;
+      background: white;
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 34px rgba(15,61,76,.10);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .node.center {
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--blue);
+      color: white;
+      font-size: 16px;
+      padding: 20px 26px;
+    }
+
+    .n1 { left: 8%; top: 18%; }
+    .n2 { right: 10%; top: 18%; }
+    .n3 { left: 10%; bottom: 18%; }
+    .n4 { right: 8%; bottom: 18%; }
+    .n5 { left: 39%; top: 8%; }
+    .n6 { left: 40%; bottom: 8%; }
+
+    section {
+      padding: 80px 0;
+    }
+
+    .section-title {
+      max-width: 760px;
+      margin-bottom: 36px;
+    }
+
+    .section-title h2 {
+      font-size: clamp(32px, 5vw, 58px);
+      letter-spacing: -0.06em;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+
+    .section-title p {
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      padding: 28px;
+      border-radius: 28px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      box-shadow: 0 10px 34px rgba(15,61,76,.06);
+    }
+
+    .card h3 {
+      font-size: 21px;
+      margin-bottom: 12px;
+      letter-spacing: -0.03em;
+    }
+
+    .card p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .flow-step {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 22px;
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .simulator {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .controls label {
+      display: block;
+      margin-bottom: 26px;
+      font-weight: 700;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      margin-top: 12px;
+      accent-color: var(--green);
+    }
+
+    .result {
+      background: var(--blue);
+      color: white;
+      border-radius: 32px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    .result small {
+      color: rgba(255,255,255,.7);
+    }
+
+    .result .big {
+      font-size: clamp(34px, 5vw, 56px);
+      font-weight: 900;
+      letter-spacing: -0.06em;
+      margin: 10px 0 22px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 12px;
+    }
+
+    .metric {
+      background: rgba(255,255,255,.1);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .roadmap {
+      display: grid;
+      gap: 14px;
+    }
+
+    .road {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 18px;
+    }
+
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--green);
+      flex: none;
+    }
+
+    .dot.pending {
+      background: transparent;
+      border: 2px solid var(--line);
+    }
+
+    footer {
+      padding: 60px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 850px) {
+      .nav-links {
+        display: none;
+      }
+
+      .grid,
+      .simulator,
+      .flow {
+        grid-template-columns: 1fr;
+      }
+
+      .map {
+        min-height: 520px;
+      }
+
+      .node {
+        font-size: 12px;
+      }
+
+      .n1, .n2, .n3, .n4, .n5, .n6 {
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+      }
+
+      .n1 { top: 8%; }
+      .n5 { top: 20%; }
+      .n2 { top: 32%; }
+      .n3 { bottom: 32%; }
+      .n6 { bottom: 20%; }
+      .n4 { bottom: 8%; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container nav">
+      <a href="#" class="brand">
+        <span class="logo"></span>
+        <span>RPE Lab</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#manifesto">Manifesto</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#laboratorio">Laboratório</a>
+        <a href="#simulador">Simulador</a>
+        <a href="#roadmap">Roadmap</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div class="badge">
+        <span class="pulse"></span>
+        Versão 0.1 Alpha — Laboratório Privado
+      </div>
+
+      <h1>Rede de Participação Econômica</h1>
+
+      <p>
+        Uma hipótese sobre como comunidades podem participar de forma mais inteligente
+        da riqueza que ajudam a criar.
+      </p>
+
+      <div class="actions">
+        <a class="btn primary" href="#laboratorio">Explorar o Laboratório</a>
+        <a class="btn" href="#simulador">Ver Simulador</a>
+      </div>
+
+      <div class="map" id="laboratorio">
+        <div class="node center">RPE Core</div>
+        <div class="node n1">Consumidores</div>
+        <div class="node n2">Comerciantes</div>
+        <div class="node n3">Comunidade</div>
+        <div class="node n4">Participação</div>
+        <div class="node n5">Atividade Real</div>
+        <div class="node n6">Prosperidade Compartilhada</div>
+      </div>
+    </section>
+
+    <section id="manifesto">
+      <div class="container">
+        <div class="section-title">
+          <h2>Manifesto</h2>
+          <p>
+            A RPE não nasce como um aplicativo, marketplace ou plano de remuneração.
+            Ela nasce como um laboratório para investigar novas formas de organizar
+            comunidades econômicas.
+          </p>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <h3>Atividade econômica real</h3>
+            <p>Nenhum benefício deve nascer apenas da entrada de pessoas. O valor precisa vir de compras, vendas, serviços e transações reais.</p>
+          </div>
+
+          <div class="card">
+            <h3>Comunidade como ativo</h3>
+            <p>Consumidores, comerciantes e construtores não são peças isoladas. Eles formam um ecossistema que pode crescer de forma coordenada.</p>
+          </div>
+
+          <div class="card">
+            <h3>Prosperidade compartilhada</h3>
+            <p>Parte do valor gerado pode retornar aos participantes que ajudam a criar, fortalecer e expandir a atividade econômica da rede.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="como-funciona">
+      <div class="container">
+        <div class="section-title">
+          <h2>Como funciona</h2>
+          <p>
+            A ideia inicial é simples: transformar consumo, comércio e confiança em uma
+            estrutura de participação econômica mensurável.
+          </p>
+        </div>
+
+        <div class="flow">
+          <div class="flow-step">1. Consumo</div>
+          <div class="flow-step">2. Comércio</div>
+          <div class="flow-step">3. Registro</div>
+          <div class="flow-step">4. Redistribuição</div>
+          <div class="flow-step">5. Comunidade</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="laboratorio">
+      <div class="container">
+        <div class="section-title">
+          <h2>Laboratório RPE</h2>
+          <p>
+            Este projeto está em fase experimental. Cada conceito será tratado como hipótese,
+            testado em simulações e refinado antes de qualquer implementação real.
+          </p>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <h3>Hipótese 001</h3>
+            <p>Uma comunidade economicamente engajada pode gerar um ecossistema sustentável se a participação estiver ligada à atividade real.</p>
+          </div>
+
+          <div class="card">
+            <h3>Hipótese 002</h3>
+            <p>Comerciantes podem preferir participar de uma rede comunitária se ela gerar recorrência e clientes reais.</p>
+          </div>
+
+          <div class="card">
+            <h3>Hipótese 003</h3>
+            <p>Consumidores podem mudar comportamento quando percebem que suas compras fortalecem um ecossistema do qual fazem parte.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="simulador">
+      <div class="container">
+        <div class="section-title">
+          <h2>Simulador econômico</h2>
+          <p>
+            Uma simulação conceitual para visualizar como uma comunidade poderia movimentar
+            valor econômico dentro da RPE.
+          </p>
+        </div>
+
+        <div class="simulator">
+          <div class="card controls">
+            <label>
+              Consumidores: <span id="consumidoresValor">300</span>
+              <input id="consumidores" type="range" min="50" max="3000" value="300" />
+            </label>
+
+            <label>
+              Comerciantes: <span id="comerciantesValor">30</span>
+              <input id="comerciantes" type="range" min="5" max="300" value="30" />
+            </label>
+
+            <label>
+              Ticket médio: R$ <span id="ticketValor">120</span>
+              <input id="ticket" type="range" min="30" max="500" value="120" />
+            </label>
+          </div>
+
+          <div class="result">
+            <small>Movimentação mensal estimada</small>
+            <div class="big" id="movimentacao">R$ 36.000</div>
+
+            <div class="metrics">
+              <div class="metric">
+                <small>Taxa plataforma</small>
+                <strong id="taxa">R$ 1.800</strong>
+              </div>
+
+              <div class="metric">
+                <small>Valor compartilhável</small>
+                <strong id="compartilhavel">R$ 900</strong>
+              </div>
+
+              <div class="metric">
+                <small>Fundo estratégico</small>
+                <strong id="fundo">R$ 360</strong>
+              </div>
+
+              <div class="metric">
+                <small>Comércios ativos</small>
+                <strong id="ativos">30</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <div class="container">
+        <div class="section-title">
+          <h2>Roadmap</h2>
+          <p>
+            A RPE será construída em versões. Primeiro visualizamos. Depois testamos.
+            Depois validamos. Só então pensamos em plataforma real.
+          </p>
+        </div>
+
+        <div class="roadmap">
+          <div class="road"><span class="dot"></span><strong>v0.1</strong> — Laboratório visual privado</div>
+          <div class="road"><span class="dot pending"></span><strong>v0.2</strong> — Manifesto expandido e mapa do conhecimento</div>
+          <div class="road"><span class="dot pending"></span><strong>v0.3</strong> — Simuladores avançados</div>
+          <div class="road"><span class="dot pending"></span><strong>v0.4</strong> — Protótipo de comunidade econômica</div>
+          <div class="road"><span class="dot pending"></span><strong>v1.0</strong> — MVP público controlado</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      RPE Lab — Rede de Participação Econômica · Versão 0.1 Alpha · Laboratório privado
+    </div>
+  </footer>
+
+  <script>
+    const consumidores = document.getElementById("consumidores");
+    const comerciantes = document.getElementById("comerciantes");
+    const ticket = document.getElementById("ticket");
+
+    const consumidoresValor = document.getElementById("consumidoresValor");
+    const comerciantesValor = document.getElementById("comerciantesValor");
+    const ticketValor = document.getElementById("ticketValor");
+
+    const movimentacao = document.getElementById("movimentacao");
+    const taxa = document.getElementById("taxa");
+    const compartilhavel = document.getElementById("compartilhavel");
+    const fundo = document.getElementById("fundo");
+    const ativos = document.getElementById("ativos");
+
+    function moeda(valor) {
+      return valor.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+        maximumFractionDigits: 0
+      });
+    }
+
+    function atualizar() {
+      const c = Number(consumidores.value);
+      const l = Number(comerciantes.value);
+      const t = Number(ticket.value);
+
+      const movimento = c * t;
+      const taxaPlataforma = movimento * 0.05;
+      const valorCompartilhavel = taxaPlataforma * 0.50;
+      const fundoEstrategico = taxaPlataforma * 0.20;
+
+      consumidoresValor.textContent = c;
+      comerciantesValor.textContent = l;
+      ticketValor.textContent = t;
+
+      movimentacao.textContent = moeda(movimento);
+      taxa.textContent = moeda(taxaPlataforma);
+      compartilhavel.textContent = moeda(valorCompartilhavel);
+      fundo.textContent = moeda(fundoEstrategico);
+      ativos.textContent = l;
+    }
+
+    consumidores.addEventListener("input", atualizar);
+    comerciantes.addEventListener("input", atualizar);
+    ticket.addEventListener("input", atualizar);
+
+    atualizar();
+  </script>
+</body>
+</html>
